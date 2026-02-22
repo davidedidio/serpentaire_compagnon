@@ -3,17 +3,12 @@ import type {InventoryKey, Player} from "../model/player";
 
 const panelStyle: React.CSSProperties = {
     border: "1px solid #ccc",
-    padding: "12px",
-};
-
-const headerCell: React.CSSProperties = {
-    borderBottom: "1px solid #ccc",
-    padding: "6px",
-    textAlign: "left",
 };
 
 const cell: React.CSSProperties = {
-    padding: "6px",
+    textAlign: "start",
+    paddingLeft: "1em",
+    display: "table-cell"
 };
 
 const removeButton: React.CSSProperties = {
@@ -23,7 +18,6 @@ const removeButton: React.CSSProperties = {
 const addItemContainer: React.CSSProperties = {
     marginTop: "12px",
     display: "flex",
-    gap: "6px",
 };
 
 interface InventoryPanelProps {
@@ -73,13 +67,7 @@ export function InventoryPanel({player, setPlayer, inventoryKey, title, maxItemS
             {player[inventoryKey].length === 0 ? (
                 <p style={{fontStyle: "italic"}}>Inventaire vide</p>
             ) : (
-                <table style={{width: "100%", borderCollapse: "collapse"}}>
-                    <thead>
-                    <tr>
-                        <th style={headerCell}>Objet</th>
-                        <th style={headerCell}></th>
-                    </tr>
-                    </thead>
+                <table>
                     <tbody>
                     {player[inventoryKey].map((item) => (
                         <tr key={item.id}>

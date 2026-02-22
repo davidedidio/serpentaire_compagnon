@@ -9,23 +9,34 @@ import {InventoryPanel} from "./components/InventoryPanel.tsx";
 import {CounterInventory} from "./components/CounterInventoryPanel.tsx";
 import type {Tab} from "./model/tab.ts";
 import {Tabs} from "./components/tabs.tsx";
+import {SaveService} from "./service/saveService.ts";
 
 const buttonStyle: React.CSSProperties = {
     cursor: "pointer",
     marginBottom: "1em"
 };
 
+const inventoryParentDivStyle: React.CSSProperties = {
+    display: "grid",
+    gridTemplateColumns: "repeat(3, auto)",
+    gridTemplateRows: "repeat(1, auto)",
+    maxWidth: "min-content"
+};
+
+
 function renderTab(activeTab: Tab, player: Player, setPlayer: Dispatch<SetStateAction<Player>>) {
     switch (activeTab) {
         case "Inventory":
             return (<div>
                     <h2>Inventaires</h2>
-                    <InventoryPanel player={player} setPlayer={setPlayer} inventoryKey={"commonInventory"}
-                                    title={"Objets Communs 10 MAX"} maxItemSize={10}/>
-                    <InventoryPanel player={player} setPlayer={setPlayer} inventoryKey={"specialInventory"}
-                                    title={"Objets Spéciaux"} maxItemSize={1000}/>
-                    <InventoryPanel player={player} setPlayer={setPlayer} inventoryKey={"vialInventory"}
-                                    title={"Fioles 6 MAX"} maxItemSize={6}/>
+                    <div style={inventoryParentDivStyle}>
+                        <InventoryPanel player={player} setPlayer={setPlayer} inventoryKey={"commonInventory"}
+                                        title={"Objets Communs 10 MAX"} maxItemSize={10}/>
+                        <InventoryPanel player={player} setPlayer={setPlayer} inventoryKey={"specialInventory"}
+                                        title={"Objets Spéciaux"} maxItemSize={1000}/>
+                        <InventoryPanel player={player} setPlayer={setPlayer} inventoryKey={"vialInventory"}
+                                        title={"Fioles 6 MAX"} maxItemSize={6}/>
+                    </div>
                     <h2>Herbes</h2>
                     <CounterInventory player={player} setPlayer={setPlayer} counterKeys={["tulipeNoir", "trempeGlace",
                         "brumaNoctae", "roseDesPres", "astorianne", "bostelie", "bruyereArdente", "perleDeNoix"]}></CounterInventory>
@@ -40,10 +51,46 @@ function renderTab(activeTab: Tab, player: Player, setPlayer: Dispatch<SetStateA
         }
         case "SkillsAndTalents": {
             return (<div>
-                <h2>Compétences</h2>
+                <h2>Capacités</h2>
                 <SkillTable player={player} setPlayer={setPlayer}/>
                 <h2>Talents</h2>
                 <TalentsTable player={player} setPlayer={setPlayer}/>
+            </div>)
+        }
+        case "Settings": {
+            return (<div>
+                <h2></h2>
+                <button style={buttonStyle} onClick={() => {
+                    clearPlayer();
+                    setPlayer(createNewPlayer());
+                }}>
+                    Réinitialiser sauvegarde
+                </button>
+
+                <h2></h2>
+                <button style={buttonStyle} onClick={async () => {
+                    try {
+                        await SaveService.exportSave(player);
+                        alert("Sauvegarde exportée !");
+                    } catch {
+                        alert("Impossible d'accéder au presse-papier");
+                    }
+                }}>
+                    Exporter sauvegarde
+                </button>
+                <h2></h2>
+                <button style={buttonStyle} onClick={async () => {
+                    try {
+                        const imported = await SaveService.importSave();
+                        setPlayer(imported)
+                        alert("Sauvegarde importée !")
+                    } catch (e) {
+                        alert((e as Error).message);
+                    }
+                }}>
+                    Importer sauvegarde
+                </button>
+
             </div>)
         }
     }
@@ -65,13 +112,6 @@ function App() {
     return (
         <div>
             <h1>{player.name}</h1>
-
-            <button style={buttonStyle} onClick={() => {
-                clearPlayer();
-                setPlayer(createNewPlayer());
-            }}>
-                Réinitialiser sauvegarde
-            </button>
 
             <CounterInventory player={player} setPlayer={setPlayer}
                               counterKeys={["gold", "skillsExperience", "destinyPoints", "throwingDaggers", "arrows"]}/>

@@ -27,18 +27,17 @@ export function createNewPlayer(): Player {
         throwingDaggers: 0,
         arrows: 0,
 
+        astorianne: 0,
+        bostelie: 0,
+        brumaNoctae: 0,
+        bruyereArdente: 0,
+        perleDeNoix: 0,
+        roseDesPres: 0,
+        trempeGlace: 0,
+        tulipeNoir: 0,
+
         commonInventory: [],
         specialInventory: [],
-        herbInventory: {
-            "tulipe noir": 0,
-            "trempeglace": 0,
-            "bruma noctae": 0,
-            "rose des pres": 0,
-            "astorianne": 0,
-            "bostelie": 0,
-            "bruyere ardente": 0,
-            "perle de noix": 0,
-        },
         vialInventory: []
     };
 }

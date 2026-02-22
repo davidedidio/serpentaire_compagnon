@@ -3,7 +3,7 @@ import type {CountableKey, Player} from "../model/player";
 interface CounterInventoryProps {
     player: Player;
     setPlayer: React.Dispatch<React.SetStateAction<Player>>;
-    counterKeys: CountableKey[]
+    counterKeys: CountableKey[];
 }
 
 const panelStyle: React.CSSProperties = {
@@ -35,6 +35,41 @@ const counterControls: React.CSSProperties = {
     justifyContent: "center",
     gap: "6px",
 };
+
+const COUNTER_FULL_CALLBACK: Record<CountableKey, (player: Player) => Player> = {
+    arrows(player: Player): Player {
+        return player;
+    },
+    astorianne(player: Player): Player {
+        return player;
+    }, bostelie(player: Player): Player {
+        return player;
+    }, brumaNoctae(player: Player): Player {
+        return player;
+    }, bruyereArdente(player: Player): Player {
+        return player;
+    }, destinyPoints(player: Player): Player {
+        return player;
+    }, gold(player: Player): Player {
+        return player;
+    }, perleDeNoix(player: Player): Player {
+        return player;
+    }, roseDesPres(player: Player): Player {
+        return player;
+    }, skillsExperience(player: Player): Player {
+        return {
+            ...player,
+            skillsExperience: player.skillsExperience - MAX_VALUES["skillsExperience"],
+            assignableSkillPoints: player.assignableSkillPoints + 1
+        };
+    }, throwingDaggers(player: Player): Player {
+        return player;
+    }, trempeGlace(player: Player): Player {
+        return player;
+    }, tulipeNoir(player: Player): Player {
+        return player;
+    }
+}
 
 const LABELS: Record<CountableKey, string> = {
     skillsExperience: "Point d'expérience de capacité",
@@ -75,10 +110,16 @@ export function CounterInventory({
                                      counterKeys
                                  }: CounterInventoryProps) {
     const updateCounter = (counterKey: CountableKey, delta: number) => {
-        setPlayer((prev) => ({
-            ...prev,
-            [counterKey]: Math.min(MAX_VALUES[counterKey], Math.max(0, ((prev[counterKey]) ?? 0) + delta))
-        }))
+        setPlayer((prev) => {
+            let newPlayer : Player = {
+                ...prev,
+                [counterKey]: Math.min(MAX_VALUES[counterKey], Math.max(0, ((prev[counterKey]) ?? 0) + delta))
+            };
+            if(newPlayer[counterKey] >= MAX_VALUES[counterKey]){
+                newPlayer = COUNTER_FULL_CALLBACK[counterKey](newPlayer)
+            }
+            return newPlayer;
+        })
     };
 
     return (
@@ -90,7 +131,7 @@ export function CounterInventory({
 
                     {/* Line 2: Value */}
                     <div
-                        style={counterValue}>{player[key] ?? 0} {MAX_VALUES[key] != Number.MAX_VALUE ? " / " + MAX_VALUES[key] : "" }
+                        style={counterValue}>{player[key] ?? 0} {MAX_VALUES[key] != Number.MAX_VALUE ? " / " + MAX_VALUES[key] : ""}
                     </div>
                     {/* Line 3: Controls */}
                     <div style={counterControls}>

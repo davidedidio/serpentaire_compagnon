@@ -21,7 +21,8 @@ const activeTabButton: React.CSSProperties = {
 const LABELS: Record<Tab, string> = {
     Inventory: "Inventaires",
     Combat: "Combat",
-    SkillsAndTalents: "Talents et Compétences"
+    SkillsAndTalents: "Talents et Compétences",
+    Settings: "Paramètres"
 };
 
 interface TabsProps {

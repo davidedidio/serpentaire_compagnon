@@ -34,7 +34,6 @@ const turnStyle: React.CSSProperties = {
     marginBottom: "8px",
     paddingBottom: "6px",
     borderBottom: "1px solid #333",
-    animation: "fadeIn 0.3s ease-in",
 };
 
 const headerCellStyle: React.CSSProperties = {
@@ -52,17 +51,20 @@ const cellStyle: React.CSSProperties = {
 function CombatTurn({turn}: CombatTurnProps) {
     return (
         <div style={turnStyle}>
-            <strong>Tour {turn.turn}</strong>
             <div>
-                Habilité — Joueur {turn.playerHabiliteRoll} / Ennemi{" "}
-                {turn.enemyHabiliteRoll}
+            <span>Tour: {turn.turn}</span>
             </div>
             <div>
-                Attaquant :{" "}
-                {turn.attacker === "player" ? "Joueur" : "Ennemi"}
+                <span>Habilité — Joueur: {turn.playerHabiliteRoll}</span>
             </div>
             <div>
-                <strong>{turn.damageDealt}</strong>
+                <span>Habilité — Ennemi: {turn.enemyHabiliteRoll}</span>
+            </div>
+            <div>
+                <span>Attaquant: {turn.attacker === "player" ? "Joueur" : "Ennemi"}</span>
+            </div>
+            <div>
+                <span>Dégats infligés: <strong>{turn.damageDealt}</strong></span>
             </div>
         </div>
     );
@@ -169,7 +171,8 @@ export function CombatPanel({player, setPlayer}: CombatPanelProps) {
                     <div>
                         {combatResult.winner} a gagné le combat.
                         <br/>
-                        {player.name} a fait {combatResult.playerDamageDealt} dégats et a reçu {combatResult.playerDamageReceived} dégats
+                        {player.name} a fait {combatResult.playerDamageDealt} dégats et a
+                        reçu {combatResult.playerDamageReceived} dégats
                     </div>
                     <div style={logContainer}>
                         {combatResult.turns.map((turn) => (

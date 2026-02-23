@@ -38,6 +38,9 @@ export function createNewPlayer(): Player {
 
         commonInventory: [],
         specialInventory: [],
-        vialInventory: []
+        vialInventory: [],
+
+        note: "",
+        bookmark: 1
     };
 }

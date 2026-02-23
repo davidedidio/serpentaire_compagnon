@@ -28,6 +28,9 @@ export interface Player {
     bostelie: number;
     bruyereArdente: number;
     perleDeNoix: number;
+
+    note: string;
+    bookmark: number;
 }
 
 export type CountableKey =

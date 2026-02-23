@@ -22,6 +22,7 @@ const LABELS: Record<Tab, string> = {
     Inventory: "Inventaires",
     Combat: "Combat",
     SkillsAndTalents: "Talents et Compétences",
+    Notes: "Notes",
     Settings: "Paramètres"
 };
 

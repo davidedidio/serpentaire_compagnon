@@ -1,6 +1,8 @@
 import type {SkillType} from "../model/skills.ts";
 import type {Player} from "../model/player.ts";
 import {increaseSkillBaseValue, isSkillIncreasable, setSkillEquipmentValue} from "../service/skillService.ts";
+import {destinyDiceRoll} from "../service/randomService.ts";
+import {useState} from "react";
 
 const cellStyle: React.CSSProperties = {
     border: "1px solid #ccc",
@@ -33,6 +35,8 @@ const LABELS: Record<SkillType, string> = {
 };
 
 export function SkillTable({player, setPlayer}: SkillTableProps) {
+    const [diceThrowValue, setDiceThrowValue] = useState(0);
+    const [diceThrowSkill, setDiceThrowSkill] = useState({} as SkillType);
 
     return (
         <table style={{borderCollapse: "collapse", width: "100%"}}>
@@ -73,7 +77,7 @@ export function SkillTable({player, setPlayer}: SkillTableProps) {
                         {player.skills[key as SkillType].equipmentValue}
 
                         <br></br>
-                        {isSkillIncreasable(player, key as SkillType) && (<div>
+                        {(<div>
                             <button
                                 style={buttonStyle}
                                 onClick={() => setPlayer(prev => setSkillEquipmentValue(prev, key as SkillType, -1))}>
@@ -100,6 +104,29 @@ export function SkillTable({player, setPlayer}: SkillTableProps) {
                     </td>
                 ))}
             </tr>
+            <tr>
+                <td style={rowHeaderStyle}>Lancé du destin</td>
+
+                {(Object.keys(player.skills) as SkillType[]).map((skill) => (
+                    <td
+                        style={{...cellStyle, fontWeight: "bold"}}
+                    >
+                        <div>
+                            {diceThrowSkill === skill ? diceThrowValue : "-"}
+                        </div>
+                        <button
+                            style={buttonStyle}
+                            onClick={() => {
+                                setDiceThrowValue(() => destinyDiceRoll() + player.skills[skill].baseValue + (player.skills[skill].equipmentValue || 0))
+                                setDiceThrowSkill(() => skill)
+                            }}>
+                            Lancé du destin
+                        </button>
+                    </td>
+
+                ))}
+            </tr>
+
             </tbody>
         </table>
     );

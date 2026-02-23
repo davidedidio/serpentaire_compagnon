@@ -25,17 +25,20 @@ const inventoryParentDivStyle: React.CSSProperties = {
 
 
 function renderTab(activeTab: Tab, player: Player, setPlayer: Dispatch<SetStateAction<Player>>) {
+    const [bookmark, setBookmark] = useState(player.bookmark);
+    const [note, setNote] = useState(player.note);
+
     switch (activeTab) {
         case "Inventory":
             return (<div>
                     <h2>Inventaires</h2>
                     <div style={inventoryParentDivStyle}>
                         <InventoryPanel player={player} setPlayer={setPlayer} inventoryKey={"commonInventory"}
-                                        title={"Objets Communs 10 MAX"} maxItemSize={10}/>
+                                        title={"Besace (10 Objets MAX)"} maxItemSize={10}/>
                         <InventoryPanel player={player} setPlayer={setPlayer} inventoryKey={"specialInventory"}
-                                        title={"Objets Spéciaux"} maxItemSize={1000}/>
+                                        title={"Poche (Objets Spéciaux)"} maxItemSize={1000}/>
                         <InventoryPanel player={player} setPlayer={setPlayer} inventoryKey={"vialInventory"}
-                                        title={"Fioles 6 MAX"} maxItemSize={6}/>
+                                        title={"Fioles (6 MAX)"} maxItemSize={6}/>
                     </div>
                     <h2>Herbes</h2>
                     <CounterInventory player={player} setPlayer={setPlayer} counterKeys={["tulipeNoir", "trempeGlace",
@@ -55,6 +58,28 @@ function renderTab(activeTab: Tab, player: Player, setPlayer: Dispatch<SetStateA
                 <SkillTable player={player} setPlayer={setPlayer}/>
                 <h2>Talents</h2>
                 <TalentsTable player={player} setPlayer={setPlayer}/>
+            </div>)
+        }
+        case "Notes": {
+            return (<div>
+                <button style={{margin: "1em"}} onClick={() => {
+                    setPlayer((prev) => {
+                        return {
+                            ...prev,
+                            bookmark: bookmark,
+                            note: note
+                        }
+                    })
+                }}>Sauvegarder
+                </button>
+                <div style={{marginBottom: "1em"}}>
+                    <label style={{marginRight: "1em"}}>Marque page numéro du livre: </label>
+                    <input id="page" type={"number"} value={bookmark}
+                           onChange={(e) => setBookmark(e.target.valueAsNumber)}></input>
+                </div>
+                <textarea id="note" style={{width: "100%", height: "40em", resize: "vertical"}}
+                          value={note}
+                          onChange={(e) => setNote(e.target.value)}></textarea>
             </div>)
         }
         case "Settings": {

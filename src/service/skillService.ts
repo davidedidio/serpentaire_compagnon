@@ -26,10 +26,6 @@ export const increaseSkillBaseValue = (prev: Player, skill: SkillType): Player =
 }
 
 export const setSkillEquipmentValue = (prev: Player, skill: SkillType, delta: number): Player => {
-    if (!isSkillIncreasable(prev, skill)) {
-        return prev;
-    }
-
     return {
         ...prev,
         skills: {
